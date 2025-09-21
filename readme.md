@@ -4,6 +4,10 @@ Welcome to Affiliate Hub, a complete, production-ready affiliate marketing platf
 
 This project enables administrators to manage a catalog of Amazon affiliate products, while end-users enjoy a clean, responsive, and mobile-friendly interface.
 
+🔗 Live Demo
+
+👉 [Click here to view the live demo](https://affiliate-hub.netlify.app/)
+
 ✨ Features
 
 Responsive Design – Mobile-first layout for seamless use on all devices.
