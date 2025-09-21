@@ -11,7 +11,7 @@ const ManageCategories = ({ onCategoryAdded }) => {
         const credentials = localStorage.getItem('authCredentials');
 
         try {
-            const response = await fetch('http://localhost:8081/api/categories', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/categories`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,9 +40,14 @@ const ManageCategories = ({ onCategoryAdded }) => {
         <div className="mt-8">
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Add New Category</h3>
             {status.message && (
-                <div className={`p-3 mb-4 rounded-md text-sm ${status.type === 'success' ? 'bg-green-100 text-green-800' :
-                        status.type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
-                    }`}>
+                <div
+                    className={`p-3 mb-4 rounded-md text-sm ${status.type === 'success'
+                            ? 'bg-green-100 text-green-800'
+                            : status.type === 'error'
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-blue-100 text-blue-800'
+                        }`}
+                >
                     {status.message}
                 </div>
             )}
@@ -55,7 +60,10 @@ const ManageCategories = ({ onCategoryAdded }) => {
                     className="flex-grow p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-400"
                     required
                 />
-                <button type="submit" className="inline-flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                <button
+                    type="submit"
+                    className="inline-flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                >
                     <PlusCircle size={20} className="mr-2" /> Add Category
                 </button>
             </form>

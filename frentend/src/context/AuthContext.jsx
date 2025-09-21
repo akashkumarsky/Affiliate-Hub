@@ -8,29 +8,28 @@ export const AuthProvider = ({ children }) => {
     // State to hold whether the user is authenticated
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // The login function. We will build the API call logic here.
     // The login function - cleaner, more reliable, and follows best practices.
     const login = async (username, password) => {
         const credentials = btoa(`${username}:${password}`);
 
         try {
-            // We now call our new, dedicated authentication endpoint.
-            // It's a GET request, so no request body is needed!
-            const response = await fetch('http://localhost:8081/api/user/me', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Basic ${credentials}`
+            // Call our dedicated authentication endpoint
+            const response = await fetch(
+                `${import.meta.env.VITE_API_BASE_URL}/api/user/me`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Basic ${credentials}`
+                    }
                 }
-            });
+            );
 
-            // If the response is OK (status 200), the credentials are valid.
             if (response.ok) {
                 setIsAuthenticated(true);
                 localStorage.setItem('authCredentials', credentials);
                 return true; // Indicate login success
             }
 
-            // If the response is not ok, the login failed.
             setIsAuthenticated(false);
             return false; // Indicate login failure
 
@@ -40,13 +39,12 @@ export const AuthProvider = ({ children }) => {
             return false;
         }
     };
-    
+
     const logout = () => {
         setIsAuthenticated(false);
         localStorage.removeItem('authCredentials');
     };
 
-    // The value provided to all children components
     const value = { isAuthenticated, login, logout };
 
     return (

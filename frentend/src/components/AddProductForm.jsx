@@ -32,7 +32,7 @@ const AddProductForm = ({ onProductAdded, categories = [] }) => {
         const credentials = localStorage.getItem('authCredentials');
 
         try {
-            const response = await fetch('http://localhost:8081/api/products', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const AddProductForm = ({ onProductAdded, categories = [] }) => {
             <p className="text-gray-600 mb-6">Use this form to add a new affiliate product to the website catalog.</p>
             {status.message && (
                 <div className={`p-3 mb-4 rounded-md text-sm ${status.type === 'success' ? 'bg-green-100 text-green-800' :
-                        status.type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                    status.type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
                     }`}>
                     {status.message}
                 </div>

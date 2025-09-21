@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState, useEffect, useMemo } from 'react';
-import { useAuth } from './context/AuthContext'; // <-- THIS IS THE FIX
+import { useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ProductCard from './components/ProductCard';
@@ -10,7 +10,6 @@ import HeroSection from './components/HeroSection';
 import { ArchiveX } from 'lucide-react';
 
 function App() {
-  // Now this line will work correctly
   const { isAuthenticated } = useAuth();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -19,18 +18,18 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState('home');
 
-
-  // This useEffect hook fetches data and is correct
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [productsResponse, categoriesResponse] = await Promise.all([
-          fetch('http://localhost:8081/api/products'),
-          fetch('http://localhost:8081/api/categories')
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`),
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/api/categories`)
         ]);
+
         if (!productsResponse.ok || !categoriesResponse.ok) {
           throw new Error('Network response was not ok');
         }
+
         const productsData = await productsResponse.json();
         const categoriesData = await categoriesResponse.json();
         setProducts(productsData);
@@ -45,7 +44,6 @@ function App() {
     fetchData();
   }, []);
 
-  // This useMemo hook for filtering is correct
   const filteredProducts = useMemo(() => {
     if (!selectedCategory) {
       return products;
@@ -53,17 +51,12 @@ function App() {
     return products.filter(product => product.categoryName === selectedCategory);
   }, [products, selectedCategory]);
 
-  // This handler for adding products is correct
   const handleProductAdded = (newProduct) => {
     setProducts(prevProducts => [...prevProducts, newProduct]);
     setPage('home');
   };
 
-
-
-  // --- ADD THIS NEW HANDLER ---
   const handleCategoryAdded = (newCategory) => {
-    // Update the categories list in real-time
     setCategories(prevCategories => [...prevCategories, newCategory]);
   };
 
@@ -74,14 +67,12 @@ function App() {
     return <div className="flex justify-center items-center h-screen text-xl text-red-600 bg-red-100 p-10 rounded-lg">{error}</div>;
   }
 
-  // The rendering logic is correct
   const renderContent = () => {
     if (page === 'admin') {
-      // If the user wants the admin page, check if they are authenticated
       return isAuthenticated
         ? <AdminDashboard
           onProductAdded={handleProductAdded}
-          categories={categories} // <-- ADD THIS PROP
+          categories={categories}
           onCategoryAdded={handleCategoryAdded}
         />
         : <LoginPage />;
@@ -94,15 +85,12 @@ function App() {
           {!selectedCategory && <HeroSection />}
           <h2 className="text-3xl font-bold text-gray-800 mb-6">{selectedCategory || 'All Products'}</h2>
 
-          {/* --- THIS IS THE UPDATED SECTION --- */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.length > 0 ? (
-              // If there are products, map over them and display them
               filteredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))
             ) : (
-              // If the array is empty, display this message component
               <div className="col-span-full flex flex-col items-center justify-center p-12 bg-gray-100 rounded-lg text-center">
                 <ArchiveX className="h-16 w-16 text-gray-400 mb-4" />
                 <h3 className="text-2xl font-semibold text-gray-700">No Products Found</h3>
@@ -122,7 +110,6 @@ function App() {
       {renderContent()}
     </div>
   );
-}sub
-
+}
 
 export default App;
