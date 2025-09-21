@@ -7,7 +7,7 @@ import ProductCard from './components/ProductCard';
 import AdminDashboard from './components/AdminDashboard';
 import LoginPage from './components/LoginPage';
 import HeroSection from './components/HeroSection';
-import { ArchiveX } from 'lucide-react';
+import { ArchiveX, Menu } from 'lucide-react';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -17,6 +17,7 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState('home');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,12 +81,17 @@ function App() {
 
     return (
       <div className="flex">
-        <Sidebar categories={categories} selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
-        <main className="ml-64 flex-1 p-8 pt-24">
+        <Sidebar categories={categories} selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+        <main className="flex-1 p-4 pt-24 md:p-8 md:ml-64">
           {!selectedCategory && <HeroSection />}
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">{selectedCategory || 'All Products'}</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{selectedCategory || 'All Products'}</h2>
+            <button className="md:hidden p-2 rounded-md bg-gray-200 hover:bg-gray-300" onClick={() => setIsSidebarOpen(true)}>
+              <Menu size={24} />
+            </button>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.length > 0 ? (
               filteredProducts.map(product => (
                 <ProductCard key={product.id} product={product} />
